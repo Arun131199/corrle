@@ -13,7 +13,7 @@ import Web from "../Web";
 
 const indexRoute = [
   {
-    path: "/home",
+    path: "/",
     Component: Home,
     children: [
       {
