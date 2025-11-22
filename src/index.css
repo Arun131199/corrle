@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: roborto;
+  src: url(assets/font/roborto.ttf);
+}
+
 /* Add this to your global CSS */
 .scrollbar-hide {
   -ms-overflow-style: none;
