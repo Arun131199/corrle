@@ -2,6 +2,8 @@ import { useState, useMemo } from "react"
 import { MdArrowUpward, MdArrowDownward, MdAccountBalance, MdFilterList, MdSearch, MdTrendingUp, MdPieChart } from "react-icons/md"
 import { FaMoneyBillWave, FaCreditCard, FaPiggyBank, FaShoppingBag, FaUtensils, FaCar, FaHome } from "react-icons/fa"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts'
+import { motion } from "framer-motion";
+
 import { Sort2Icon } from "@1771technologies/lytenyte-core/icons"
 
 // Mock transactions data (replace with your actual import)
@@ -18,6 +20,21 @@ const mockTransactions = [
     { id: 10, description: "Mobile Recharge", amount: -299, category: "Utilities", date: "2024-01-06", account: "Main Account", type: "expense" },
 ]
 
+const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+};
+
+const fadeScale = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1 }
+};
+
+const staggerParent = {
+    visible: {
+        transition: { staggerChildren: 0.07 }
+    }
+};
 export default function Transactions() {
     const [transactions] = useState(mockTransactions)
     const [filter, setFilter] = useState("all")
@@ -155,18 +172,49 @@ export default function Transactions() {
             <MdArrowUpward size={14} className="text-purple-600" /> :
             <MdArrowDownward size={14} className="text-purple-600" />
     }
+    const fadeUp = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
+    const clickBounce = {
+        tap: { scale: 0.9 },
+        hover: { scale: 1.05 }
+    };
+
 
     return (
         <div className="p-6 max-w-7xl mx-auto">
             {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">Transactions</h1>
-                <p className="text-gray-600">Manage and track your financial activities</p>
-            </div>
+            <motion.div
+                className="mb-8"
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                    Transactions
+                </h1>
+                <p className="text-gray-600">
+                    Manage and track your financial activities
+                </p>
+            </motion.div>
+
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 shadow-sm">
+            <motion.div
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+            >
+                {/* Total Income */}
+                <motion.div
+                    variants={fadeUp}
+                    transition={{ duration: 0.6, delay: 0 * 0.15 }}
+                    className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 shadow-sm"
+                >
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm text-green-600 mb-1">Total Income</p>
@@ -177,9 +225,14 @@ export default function Transactions() {
                             <MdArrowUpward className="text-green-600" size={24} />
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-6 shadow-sm">
+                {/* Total Expenses */}
+                <motion.div
+                    variants={fadeUp}
+                    transition={{ duration: 0.6, delay: 1 * 0.15 }}
+                    className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-6 shadow-sm"
+                >
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm text-red-600 mb-1">Total Expenses</p>
@@ -190,16 +243,21 @@ export default function Transactions() {
                             <MdArrowDownward className="text-red-600" size={24} />
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-6 shadow-sm">
+                {/* Net Balance */}
+                <motion.div
+                    variants={fadeUp}
+                    transition={{ duration: 0.6, delay: 2 * 0.15 }}
+                    className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-6 shadow-sm"
+                >
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm text-blue-600 mb-1">Net Balance</p>
                             <p className={`text-2xl font-bold ${netBalance >= 0 ? 'text-gray-800' : 'text-red-600'}`}>
                                 {formatAmount(netBalance)}
                             </p>
-                            <p className={`text-xs ${netBalance >= 0 ? 'text-blue-600' : 'text-red-600'} mt-1`}>
+                            <p className={`text-xs mt-1 ${netBalance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                                 {netBalance >= 0 ? '+5% growth' : '-3% decrease'}
                             </p>
                         </div>
@@ -207,16 +265,32 @@ export default function Transactions() {
                             <MdAccountBalance className="text-blue-600" size={24} />
                         </div>
                     </div>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
+
 
             {/* Filters and Search */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
+            <motion.div
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={fadeUp}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+            >
                 <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        {/* Filter Buttons */}
+
+                    {/* Filter Buttons Container */}
+                    <motion.div
+                        className="flex flex-col sm:flex-row gap-4"
+                        variants={fadeUp}
+                        transition={{ delay: 0.1 }}
+                    >
                         <div className="flex bg-gray-100 rounded-lg p-1">
-                            <button
+
+                            <motion.button
+                                variants={fadeUp}
+                                transition={{ delay: 0.15 }}
                                 onClick={() => setFilter("all")}
                                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${filter === "all"
                                     ? "bg-white text-purple-600 shadow-sm"
@@ -224,8 +298,11 @@ export default function Transactions() {
                                     }`}
                             >
                                 All
-                            </button>
-                            <button
+                            </motion.button>
+
+                            <motion.button
+                                variants={fadeUp}
+                                transition={{ delay: 0.25 }}
                                 onClick={() => setFilter("income")}
                                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${filter === "income"
                                     ? "bg-white text-green-600 shadow-sm"
@@ -233,8 +310,11 @@ export default function Transactions() {
                                     }`}
                             >
                                 Income
-                            </button>
-                            <button
+                            </motion.button>
+
+                            <motion.button
+                                variants={fadeUp}
+                                transition={{ delay: 0.35 }}
                                 onClick={() => setFilter("expense")}
                                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${filter === "expense"
                                     ? "bg-white text-red-600 shadow-sm"
@@ -242,13 +322,22 @@ export default function Transactions() {
                                     }`}
                             >
                                 Expenses
-                            </button>
+                            </motion.button>
+
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Search Bar */}
-                    <div className="relative">
-                        <MdSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                    <motion.div
+                        className="relative"
+                        variants={fadeUp}
+                        transition={{ delay: 0.45 }}
+                    >
+                        <MdSearch
+                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                            size={20}
+                        />
+
                         <input
                             type="text"
                             placeholder="Search transactions..."
@@ -256,54 +345,80 @@ export default function Transactions() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 w-full md:w-64"
                         />
-                    </div>
+                    </motion.div>
+
                 </div>
-            </div>
+            </motion.div>
+
 
             {/* View Toggle */}
-            <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm w-fit mb-6">
-                <button
+            <motion.div
+                className="flex items-center gap-2 p-2 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm w-fit mb-6"
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6 }}
+            >
+                {/* Table Button */}
+                <motion.button
+                    variants={clickBounce}
+                    whileTap="tap"
+                    whileHover="hover"
+                    onClick={() => setToggle("TableView")}
                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${toggle === "TableView"
                         ? "bg-white text-purple-600 shadow-md border border-purple-100"
                         : "text-gray-600 hover:text-purple-500 hover:bg-white"
                         }`}
-                    onClick={() => setToggle('TableView')}
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
                     Table
-                </button>
+                </motion.button>
 
-                <button
+                {/* Grid Button */}
+                <motion.button
+                    variants={clickBounce}
+                    whileTap="tap"
+                    whileHover="hover"
+                    onClick={() => setToggle("GridView")}
                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${toggle === "GridView"
                         ? "bg-white text-purple-600 shadow-md border border-purple-100"
                         : "text-gray-600 hover:text-purple-500 hover:bg-white"
                         }`}
-                    onClick={() => setToggle('GridView')}
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                     </svg>
                     Grid
-                </button>
+                </motion.button>
 
-                <button
+                {/* Chart Button */}
+                <motion.button
+                    variants={clickBounce}
+                    whileTap="tap"
+                    whileHover="hover"
+                    onClick={() => setToggle("ChartView")}
                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${toggle === "ChartView"
                         ? "bg-white text-purple-600 shadow-md border border-purple-100"
                         : "text-gray-600 hover:text-purple-500 hover:bg-white"
                         }`}
-                    onClick={() => setToggle('ChartView')}
                 >
                     <MdPieChart className="w-4 h-4" />
                     Charts
-                </button>
-            </div>
+                </motion.button>
+            </motion.div>
 
             {/* Content Area */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300">
                 {toggle === "TableView" && (
-                    <div className="min-h-[400px]">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="min-h-[400px]"
+                    >
                         {/* Table Header */}
                         <div className="bg-gradient-to-r from-purple-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
                             <div className="grid grid-cols-12 gap-4 text-sm font-semibold text-gray-700">
@@ -325,7 +440,12 @@ export default function Transactions() {
                         </div>
 
                         {/* Table Body */}
-                        <div className="divide-y divide-gray-100">
+                        <motion.div
+                            variants={staggerParent}
+                            initial="hidden"
+                            animate="visible"
+                            className="divide-y divide-gray-100"
+                        >
                             {currentPageData.length > 0 ? (
                                 currentPageData.map((item) => (
                                     <div
@@ -404,7 +524,7 @@ export default function Transactions() {
                                     </button>
                                 </div>
                             )}
-                        </div>
+                        </motion.div>
 
                         {/* Pagination */}
                         {filteredTransactions.length > 0 && (
@@ -430,8 +550,8 @@ export default function Transactions() {
                                                     key={page}
                                                     onClick={() => setCurrentPage(page)}
                                                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-all duration-200 ${currentPage === page
-                                                            ? 'bg-purple-600 text-white shadow-md'
-                                                            : 'text-gray-600 hover:bg-gray-100'
+                                                        ? 'bg-purple-600 text-white shadow-md'
+                                                        : 'text-gray-600 hover:bg-gray-100'
                                                         }`}
                                                 >
                                                     {page}
@@ -450,16 +570,28 @@ export default function Transactions() {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </motion.div>
                 )}
 
                 {toggle === "GridView" && (
-                    <div className="p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.97 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.25 }}
+                        className="p-6"
+                    >
+                        <motion.div
+                            variants={staggerParent}
+                            initial="hidden"
+                            animate="visible"
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                        >
+
                             {currentPageData.length > 0 ? (
                                 currentPageData.map((item) => (
-                                    <div
+                                    <motion.div
                                         key={item.id}
+                                        variants={fadeScale}
                                         className="bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-all duration-300 hover:border-purple-200 group cursor-pointer"
                                     >
                                         <div className="flex items-start justify-between mb-3">
@@ -500,7 +632,7 @@ export default function Transactions() {
                                                 </p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))
                             ) : (
                                 <div className="col-span-full text-center py-16">
@@ -519,7 +651,7 @@ export default function Transactions() {
                                     </button>
                                 </div>
                             )}
-                        </div>
+                        </motion.div>
 
                         {/* Grid View Pagination */}
                         {filteredTransactions.length > 0 && (
@@ -545,14 +677,25 @@ export default function Transactions() {
                                 </button>
                             </div>
                         )}
-                    </div>
+                    </motion.div>
                 )}
 
                 {toggle === "ChartView" && (
-                    <div className="p-6">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="p-6"
+                    >
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                             {/* Income vs Expenses Chart */}
-                            <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-6">
+                            <motion.div
+                                variants={fadeScale}
+                                initial="hidden"
+                                animate="visible"
+                                transition={{ duration: 0.3 }}
+                                className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-6"
+                            >
                                 <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                                     <MdTrendingUp className="text-purple-500" />
                                     Income vs Expenses
@@ -572,10 +715,16 @@ export default function Transactions() {
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
-                            </div>
+                            </motion.div>
 
                             {/* Expense Categories Pie Chart */}
-                            <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-6">
+                            <motion.div
+                                variants={fadeScale}
+                                initial="hidden"
+                                animate="visible"
+                                transition={{ duration: 0.3 }}
+                                className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-6"
+                            >
                                 <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                                     <MdPieChart className="text-purple-500" />
                                     Expense Categories
@@ -601,11 +750,17 @@ export default function Transactions() {
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
 
                         {/* Monthly Trend Line Chart */}
-                        <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-6">
+                        <motion.div
+                            variants={fadeScale}
+                            initial="hidden"
+                            animate="visible"
+                            transition={{ duration: 0.3 }}
+                            className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-6"
+                        >
                             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                                 <MdTrendingUp className="text-purple-500" />
                                 Monthly Financial Trend
@@ -641,10 +796,10 @@ export default function Transactions() {
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
                 )}
             </div>
-        </div>
+        </div >
     )
 }
