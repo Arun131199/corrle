@@ -120,7 +120,7 @@ export default function Login() {
                         {/* Footer */}
                         <div className="mt-6 text-center">
                             <p className="text-gray-400 text-sm">
-                                Don't have an accout <strong className="text-white underline">Sign up </strong> here!</p>
+                                Don't have an accout <strong className="text-white underline" onClick={()=>navigate('/register')}>Sign up </strong> here!</p>
                         </div>
                     </div>
                 </div>

@@ -23,10 +23,10 @@ export default function Navbar({ options = [] }) {
     }, [isProfileOpen]);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-gray-50">
             {/* Fixed Horizontal Navbar */}
-            <nav className="bg-gradient-to-r from-[#571788] to-[#8a2be2] shadow-2xl shadow-purple-900/30 border-b border-purple-300/20 z-50 fixed top-0 left-0 right-0">
-                <div className="flex items-center justify-between px-6 py-3">
+            <nav className="bg-gradient-to-r from-[#571788] to-[#8a2be2] shadow-2xl shadow-purple-900/30 border-b border-purple-300/20 z-50 fixed top-0 left-0 right-0 h-16">
+                <div className="flex items-center justify-between px-6 h-full">
                     {/* Left side - Page title or breadcrumb */}
                     <div className="flex items-center space-x-4">
                         <h1 className="text-white text-xl font-bold hidden md:block">
@@ -151,16 +151,19 @@ export default function Navbar({ options = [] }) {
             </nav>
 
             {/* Main Content Area with Vertical Sidebar */}
-            <div className="flex flex-1 pt-16"> {/* Added pt-16 for horizontal navbar height */}
+            <div className="flex flex-1 pt-16"> {/* Fixed height for horizontal navbar */}
                 {/* Fixed Vertical Sidebar */}
-                <div className={`bg-gradient-to-b from-[#571788] to-[#8a2be2] h-[calc(100vh-64px)] shadow-2xl shadow-purple-900/30 border-r border-purple-300/20 transition-all duration-300 fixed top-16 bottom-0 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+                <div
+                    className={`bg-gradient-to-b from-[#571788] to-[#8a2be2] shadow-2xl shadow-purple-900/30 border-r border-purple-300/20 transition-all duration-300 fixed top-16 bottom-0 ${isCollapsed ? 'w-20' : 'w-64'}`}
+                    style={{ height: 'calc(100vh - 64px)' }} /* Exact calculation */
+                >
                     {/* Header Section */}
                     <div className="p-6 border-b border-purple-300/20">
                         <div className="flex items-center justify-between">
                             {!isCollapsed && (
                                 <div className="text-white">
                                     {/* Optional: Add sidebar header content here */}
-                                    <img src={logo} alt="" />
+                                    <img src={logo} alt="Logo" className="h-8 w-auto" />
                                 </div>
                             )}
 
@@ -182,7 +185,7 @@ export default function Navbar({ options = [] }) {
                     </div>
 
                     {/* Navigation Options */}
-                    <div className="p-4 space-y-2">
+                    <div className="p-4 space-y-2 overflow-y-auto" style={{ height: 'calc(100% - 80px)' }}> {/* Adjust height for header */}
                         {options.map((value, index) => (
                             <button
                                 key={index}
@@ -208,8 +211,11 @@ export default function Navbar({ options = [] }) {
                 </div>
 
                 {/* Scrollable Main Content Area */}
-                <div className={`flex-1 transition-all duration-300 min-h-[calc(100vh-64px)] overflow-auto ${isCollapsed ? 'ml-20' : 'ml-64'}`}>
-                    <div className=""> {/* Added proper padding */}
+                <div
+                    className={`flex-1 transition-all duration-300 min-h-[calc(100vh-64px)] overflow-auto bg-gray-50 ${isCollapsed ? 'ml-20' : 'ml-64'}`}
+                >
+                    {/* Perfectly aligned content area */}
+                    <div className="w-full h-full">
                         <Outlet />
                     </div>
                 </div>
