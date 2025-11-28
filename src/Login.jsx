@@ -6,11 +6,10 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [role, setRole] = useState('')
+    const [password, setPassword] = useState('')
 
     const handleLogin = () => {
-        dispatch(login({ name, email, role }))
+        dispatch(login({  email}))
     }
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
 
@@ -40,27 +39,6 @@ export default function Login() {
 
                         {/* Form */}
                         <div className="space-y-6">
-                            {/* Name Input */}
-                            <div className="group">
-                                <label className="block text-sm font-medium text-gray-300 mb-2 ml-1">
-                                    Full Name
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Enter your name"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        className="w-full px-4 py-3 bg-white/5 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 group-hover:border-gray-500/70"
-                                    />
-                                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                                        <svg className="w-5 h-5 text-gray-400 group-focus-within:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-
                             {/* Email Input */}
                             <div className="group">
                                 <label className="block text-sm font-medium text-gray-300 mb-2 ml-1">
@@ -85,14 +63,14 @@ export default function Login() {
                             {/* Role Input */}
                             <div className="group">
                                 <label className="block text-sm font-medium text-gray-300 mb-2 ml-1">
-                                    Role
+                                    Password
                                 </label>
                                 <div className="relative">
                                     <input
-                                        type="text"
+                                        type="password"
                                         placeholder="Enter your role"
-                                        value={role}
-                                        onChange={(e) => setRole(e.target.value)}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         className="w-full px-4 py-3 bg-white/5 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 group-hover:border-gray-500/70"
                                     />
                                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -120,7 +98,7 @@ export default function Login() {
                         {/* Footer */}
                         <div className="mt-6 text-center">
                             <p className="text-gray-400 text-sm">
-                                Don't have an accout <strong className="text-white underline" onClick={()=>navigate('/register')}>Sign up </strong> here!</p>
+                                Don't have an accout <strong className="text-white underline cursor-pointer" onClick={()=>navigate('/register')}>Sign up </strong> here!</p>
                         </div>
                     </div>
                 </div>

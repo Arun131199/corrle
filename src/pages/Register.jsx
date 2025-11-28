@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,15 @@ export default function Register() {
     password: "",
     confirmPassword: ""
   });
+
+  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleEyeIcon = () => {
+    setShowPassword(!showPassword);
+  };
+
+
 
   const handleChange = (e) => {
     setFormData({
@@ -19,12 +29,16 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Registration data:", formData);
-    // Handle registration logic here
+    const timer = setTimeout(() => {
+      navigate('/login')
+    }, 3000)
+    return () => clearTimeout(timer)
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#281b4a] to-[#571788] flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
+      <div className="max-w-3xl w-full ">
         {/* Card Container */}
         <div className="bg-gradient-to-br from-[#4a336c] to-[#653091] rounded-3xl shadow-2xl p-8">
           {/* Header */}
@@ -40,111 +54,95 @@ export default function Register() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  placeholder="Enter your full name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
-                  required
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <span className="text-gray-400">👤</span>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+              <div>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                    required
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-gray-400">👤</span>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Email Address */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
-                  required
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <span className="text-gray-400">📧</span>
+              <div>
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                    required
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-gray-400">📧</span>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Role */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Role
-              </label>
-              <div className="relative">
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white appearance-none"
-                  required
-                >
-                  <option value="">Select your role</option>
-                  <option value="developer">Developer</option>
-                  <option value="designer">Designer</option>
-                  <option value="manager">Manager</option>
-                  <option value="student">Student</option>
-                  <option value="other">Other</option>
-                </select>
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                  <span className="text-gray-400">💼</span>
+              <div>
+                <div className="relative">
+                  <select
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white appearance-none"
+                    required
+                  >
+                    <option value="">Select your role</option>
+                    <option value="developer">Developer</option>
+                    <option value="designer">Designer</option>
+                    <option value="manager">Manager</option>
+                    <option value="student">Student</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                    <span className="text-gray-400">💼</span>
+                  </div>
                 </div>
               </div>
-            </div>
+              <div>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Create a password"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                    required
+                  />
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Create a password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
-                  required
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <span className="text-gray-400">🔒</span>
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-gray-400 cursor-pointer" onClick={handleEyeIcon}>
+                      {showPassword ? "👁️" : "🙈"}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Confirm Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirm your password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
-                  required
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <span className="text-gray-400">✅</span>
+
+              </div>
+              <div>
+                <div className="relative">
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Confirm your password"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                    required
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <span className="text-gray-400">✅</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -197,8 +195,8 @@ export default function Register() {
           <div className="text-center">
             <p className="text-gray-600">
               Already have an account?{" "}
-              <a 
-                href="/login" 
+              <a
+                href="/login"
                 className="text-blue-600 hover:text-blue-500 font-semibold transition-colors duration-200"
               >
                 Sign in here!
